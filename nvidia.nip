@@ -1,3 +1,46 @@
+# URL do arquivo ZIP
+$url = "https://bitbucket.org/guizinopt/nvidea/downloads/nvidiaProfileInspector.zip"
+
+# Caminho completo para onde o arquivo ZIP será baixado
+$caminhoPasta = "C:\Windows\Temp\OTZ"
+
+# Verifica se a pasta de destino existe, se não, cria a pasta
+if (-not (Test-Path -Path $caminhoPasta)) {
+    New-Item -Path $caminhoPasta -ItemType Directory -Force
+}
+
+# Caminho completo para o arquivo ZIP
+$caminhoArquivoZip = Join-Path -Path $caminhoPasta -ChildPath "nvidiaProfileInspector.zip"
+
+# Baixa o arquivo ZIP da URL especificada e o salva no caminho especificado
+Invoke-WebRequest -Uri $url -OutFile $caminhoArquivoZip
+
+# Verifica se o arquivo ZIP foi baixado com sucesso
+if (Test-Path $caminhoArquivoZip) {
+    Write-Host "Arquivo ZIP baixado com sucesso em $caminhoArquivoZip."
+
+    # Caminho completo para onde o conteúdo do ZIP será extraído
+    $caminhoExtracao = Join-Path -Path $caminhoPasta -ChildPath "Extracao"
+
+    # Extrai o conteúdo do ZIP para o caminho especificado
+    Expand-Archive -Path $caminhoArquivoZip -DestinationPath $caminhoExtracao -Force
+
+    # Caminho completo para o arquivo executável
+    $caminhoExe = Join-Path -Path $caminhoExtracao -ChildPath "nvidiaProfileInspector.exe"
+
+    # Verifica se o arquivo executável existe após a extração
+    if (Test-Path $caminhoExe) {
+        Write-Host "Arquivo executável encontrado em $caminhoExe."
+
+        # Executa o arquivo executável como administrador
+        Start-Process -FilePath $caminhoExe -Verb RunAs
+    } else {
+        Write-Host "Arquivo executável não encontrado após extração."
+    }
+} else {
+    Write-Host "Falha ao baixar o arquivo ZIP."
+}
+
 # URL do novo arquivo a ser baixado
 $url = "https://raw.githubusercontent.com/devxdfps/xd4/main/LowInputLatencyProfile.nip"
 
