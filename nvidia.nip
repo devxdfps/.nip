@@ -1,0 +1,9 @@
+# URL do novo arquivo a ser baixado
+$url = "https://raw.githubusercontent.com/devxdfps/xd4/main/LowInputLatencyProfile.nip"
+
+# Caminho completo para onde o arquivo será baixado
+$caminhoPasta = [Environment]::GetFolderPath("Desktop")
+$caminhoArquivo = Join-Path -Path $caminhoPasta -ChildPath "LowInputLatencyProfile.nip"
+
+# Baixar o arquivo
+Invoke-WebRequest -Uri $url -OutFile $caminhoArquivo
